@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import Axios from 'axios';
 import './App.css';
 
 function App() {
+
+  const [joke, setJoke] = useState("");
+  const [anotherJoke, setAnotherJoke] = useState("")
+
+  const getJoke = () => {
+    Axios.get("https://api.chucknorris.io/jokes/random")
+      .then((response) => {
+          setJoke(response.data.value)
+      });
+  };
+
+  const getJokeWithFetch = () => {
+    fetch("https://api.chucknorris.io/jokes/random")
+      .then((response) => response.json())
+      .then((data) => {
+          setAnotherJoke(data.value)
+      });
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={getJoke}>Get a joke</button>
+      <div>
+        {joke}
+      </div>
+      <button onClick={getJokeWithFetch}>Get another joke</button>
+      <div>
+        {anotherJoke}
+      </div>
     </div>
   );
 }
